@@ -5,12 +5,15 @@ const testSheetId = 'od6';
 
 var spreadsheet = new GoogleSpreadsheet(testKey);
 
-var rowsStream = spreadsheet.getRows(testSheetId)
+spreadsheet.getColumnHeaders(testSheetId)
   .on('data', function(data) {
-    console.log(data);
-  });
-
-var headerStream = spreadsheet.getColumnHeaders(testSheetId)
-  .on('data', function(data) {
-    console.log(data);
+    console.log('Column Headers: ' + data);
+  })
+  .on('end', function() {
+    var currentRow = 1;
+    spreadsheet.getRows(testSheetId)
+      .on('data', function(data) {
+        console.log('Row ' + currentRow + ': ' + data);
+        currentRow++;
+      });
   });

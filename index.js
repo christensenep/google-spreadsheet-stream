@@ -33,6 +33,7 @@ module.exports = function(key) {
     },
     function end() {
       this.queue(columnHeaders);
+      this.queue(null);
     });
 
     var stream = request( { url: url } )
