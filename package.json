@@ -1,0 +1,14 @@
+{
+  "name": "google-spreadsheet-stream",
+  "version": "0.1.0",
+  "description": "Streaming interface for google spreadsheets",
+  "main": "index.js",
+  "dependencies": {
+    "request" : "~2.27.0",
+    "JSONStream" : "~0.7.1",
+    "through" : "~2.3.4"
+  },
+  "author": "Erik Christensen",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
