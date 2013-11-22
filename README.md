@@ -1,4 +1,6 @@
-# NodeJS Streaming API for Google Spreadsheets
+# Streaming API for Google Spreadsheets
+
+[![NPM version](https://badge.fury.io/js/google-spreadsheet-stream.png)](http://badge.fury.io/js/google-spreadsheet-stream)
 
 A very basic streaming API for Google Spreadsheets.
 
