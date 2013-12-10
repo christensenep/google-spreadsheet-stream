@@ -16,7 +16,7 @@ npm install google-spreadsheet-stream
 ## Basic Usage
 
 ``` javascript
-const GoogleSpreadsheet = require('../index.js');
+const GoogleSpreadsheet = require('google-spreadsheet-stream');
 
 const testKey = '0AmBuTbmfT_ZudHBIY1FfbWUzU2pQSjgwX1VON09Gd3c';
 const testSheetId = 'od6';
