@@ -11,17 +11,15 @@ module.exports = function(key) {
   }
 
   function handleRequestError(err) {
-    if (!this.hasError) {
-      console.error('Error connecting to url ' + url + ' (' + err.message + ')');
-      this.hasError = true;
-    }
+    var error = new Error('Error connecting to url ' + google_url);
+    error.inner = err;
+    this.emit('error', error);
   };
 
   function handleParseError(err) {
-    if (!this.hasError) {
-      console.error('Error parsing JSON (' + err.message + ')');
-      this.hasError = true;
-    }
+    var error = new Error('Error parsing JSON');
+    error.inner = err;
+    this.emit('error', error);
   };
 
   this.getColumnHeaders = function getColumnHeaders(sheetId) {
@@ -36,13 +34,18 @@ module.exports = function(key) {
       this.queue(null);
     });
 
-    var stream = request( { url: url } )
-      .on('error', handleRequestError)
-      .pipe(JSONStream.parse(['feed','entry',true,'content','$t']))
-      .on('error', handleParseError)
-      .pipe(collectHeaders)
+    var resultStream = through(function write(data) {
+      this.emit('data', data)
+    });
 
-    return stream;
+    var internalStream = request( { url: url } )
+      .on('error', handleRequestError.bind(resultStream))
+      .pipe(JSONStream.parse(['feed','entry',true,'content','$t']))
+      .on('error', handleParseError.bind(resultStream))
+      .pipe(collectHeaders)
+      .pipe(resultStream);
+
+    return resultStream;
   };
 
   this.getRows = function getRows(sheetId) {
@@ -58,11 +61,18 @@ module.exports = function(key) {
       this.queue(rowData);
     });
 
-    return request( {url: url } )
-      .on('error', handleRequestError)
+    var resultStream = through(function write(data) {
+      this.emit('data', data)
+    });
+
+    var internalStream = request( {url: url } )
+      .on('error', handleRequestError.bind(resultStream))
       .pipe(JSONStream.parse(['feed','entry',true]))
-      .on('error', handleParseError)
+      .on('error', handleParseError.bind(resultStream))
       .pipe(parseRowData)
+      .pipe(resultStream);
+
+    return resultStream;
   };
 }
 

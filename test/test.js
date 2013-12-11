@@ -9,11 +9,17 @@ spreadsheet.getColumnHeaders(testSheetId)
   .on('data', function(data) {
     console.log('Column Headers: ' + data);
   })
+  .on('error', function(err) {
+    console.log(err)
+  })
   .on('end', function() {
     var currentRow = 1;
     spreadsheet.getRows(testSheetId)
-      .on('data', function(data) {
-        console.log('Row ' + currentRow + ': ' + data);
-        currentRow++;
-      });
-  });
+    .on('data', function(data) {
+      console.log('Row ' + currentRow + ': ' + data);
+      currentRow++;
+    })
+    .on('error', function(err) {
+      console.log(err);
+    })
+  })
